@@ -1,0 +1,48 @@
+﻿ @model MarketPlace.dataLayer.Entities.Order.Order
+ @using MarketPlace.application.Utils
+   <a href="javascript:void(0)"><i class="fa fa-shopping-bag" aria-hidden="true"></i> <i class="fa fa-angle-down"></i></a>
+                            <span class="cart_quantity">@Model.OrderDetails.Count()</span>
+                            <!--mini cart-->
+                            <div class="mini_cart">
+                                <div class="cart_items_container">
+                                 
+                                    @foreach (var item in Model.OrderDetails)
+                                   {
+                                          <div class="cart_item">
+                                        <div class="cart_img">
+                                            <a asp-area="" asp-controller="Product" asp-action="ProductDetail" asp-route-productId="@item.Product.Id"><img src="@(PathExtension.ProductThumbImage+item.Product.ImageName)" alt=""></a>
+                                        </div>
+                                        <div class="cart_info">
+                                            <a asp-area="" asp-controller="Product" asp-action="ProductDetail" asp-route-productId="@item.Product.Id">@item.Product.Title</a>
+                                            <p>تعداد: @item.Count × <span>@item.Product.Price.ToString("n0") تومان </span> <span style="width:8px;height:8px;background:@item.ProductColor.ColorCode;display:inline-block;border-radius:50%"></span></p>
+                                       
+
+                                        </div>
+                                        <div class="cart_remove">
+                                            <a href="#"><i class="ion-android-close"></i></a>
+                                        </div>
+                                    </div>
+                                   }
+                                </div>
+                                <div class="mini_cart_table">
+                                    <div class="cart_total">
+                                        <span>جمع اجزا:</span>
+                                        <span  class="price">@Model.OrderDetails.Sum(p => p.Product.Price*p.Count).ToString("n0") تومان </span>
+                                    </div>
+                                  @*  <div class="cart_total mt-10">
+                                        <span>جمع کل:</span>
+                                        <span class="price">138,000 تومان </span>
+                                    </div>*@
+                                </div>
+
+                                <div class="mini_cart_footer">
+                                    <div class="cart_button">
+                                        <a href="cart.html">مشاهده سبد</a>
+                                    </div>
+                                    <div class="cart_button">
+                                        <a href="checkout.html">پرداخت</a>
+                                    </div>
+
+                                </div>
+                                </div>
+                                

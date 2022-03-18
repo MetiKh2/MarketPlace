@@ -1,0 +1,93 @@
+﻿@model MarketPlace.dataLayer.DTOs.Store.FilterProductsDto
+@using MarketPlace.application.EnumExtensions
+@using MarketPlace.application.Utils
+@{
+    ViewData["Title"] = "لیست محصولات";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    string NotFoundError = "محصولی یافت نشد";
+}
+ 
+
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a href="/">خانه</a></li>
+                        <li>@ViewData["Title"]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="main_content_area">
+    <div class="container">
+        <div class="account_dashboard">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    @await Component.InvokeAsync("StoreSideBar")
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-9">
+                    <!-- Tab panes -->
+                    <div class="tab-content dashboard_content">
+                        <div class="tab-pane fade active show" id="account-details">
+                            <h3>@ViewData["Title"] </h3>
+                            <div class="table-responsive">
+                                <form id="filter-form" asp-area="Store" asp-controller="Product" asp-action="Index" method="get">
+                                    <input type="hidden" asp-for="PageId"/>
+                                </form>
+                                @if (Model.Products != null && Model.Products.Any())
+                                {
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>تصویر</th>
+                                                <th>عنوان محصول</th>
+                                                <th>وضعیت</th>
+                                                <th>دستورات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Products)
+                                            {
+                                                <tr>
+                                                    <td><img src="@(PathExtension.ProductThumbImage+item.ImageName)"  /></td>
+                                                    <td>@item.Title</td>
+                                                    <td>
+                                                        <span class="danger">@item.ProductAcceptanceState.GetEnumDisplayName()\@(item.IsActive?"فعال":"غیرفعال")  </span>
+                                                        @if (item.ProductAcceptanceState==MarketPlace.dataLayer.Entities.Store.ProductAcceptanceState.Rejected)
+                                                       {
+                                                        <hr>
+                                                        <div class="text-danger" style="font-size:12px">@item.ProductAcceptOrRejectDescription</div>
+                                                       }
+                                                        </td>
+                                                    <td>
+                                                        <a asp-area="Store" asp-controller="Product" asp-action="EditProduct" asp-route-productId="@item.Id" class="view">ویرایش محصول  </a> |
+                                                        <a asp-area="Store" asp-controller="Product" asp-action="GetProductGalleries" asp-route-productId="@item.Id" class="view">گالری محصول  </a> |
+                                                        <a asp-area="Store" asp-controller="ProductDiscount" asp-action="CreateProductDiscount" asp-route-productId="@item.Id" asp-route-productId="@item.Id" class="view"> افزودن کد نخفیف </a> |
+                                                        <a asp-area="Store" asp-controller="ProductDiscount" asp-action="Index" asp-route-productId="@item.Id" class="view"> کد های تخفیف  </a>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                    <partial name="_SitePaging" model="@Model.GetCurrentPaging()"></partial>
+
+                                }
+            else
+            {
+                                    <partial name="_NoItemFound" model="@NotFoundError"/>
+            }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+ 

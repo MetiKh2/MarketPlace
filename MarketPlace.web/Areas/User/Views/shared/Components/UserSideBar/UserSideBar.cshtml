@@ -1,0 +1,18 @@
+﻿@inject MarketPlace.application.Services.Interfaces.IStoreService _storeService
+@using MarketPlace.web.Utilities
+<div class="dashboard_tab_button">
+    <ul role="tablist" class="nav flex-column dashboard-list">
+        <li><a asp-area="User" asp-action="Index" asp-controller="Home" class="nav-link active show">داشبورد</a></li>
+        <li><a asp-area="User" asp-action="ChangePassword" asp-controller="Account" class="nav-link">تغییر کلمه عبور </a></li>
+        <li><a asp-area="User" asp-action="EditUserProfile" asp-controller="Account" class="nav-link">ویرایش حساب کاربری</a></li>
+        <li><a asp-area="User" asp-action="AddTicket" asp-controller="Ticket" class="nav-link">ثبت تیکت</a></li>
+        <li><a asp-area="User" asp-action="Index" asp-controller="Ticket" class="nav-link">لیست تیکت ها</a></li>
+        <li><a asp-area="User" asp-action="UserOpenOrder" asp-controller="Order" class="nav-link">سبد خرید </a></li>
+        <li><a asp-area="User" asp-action="RequestStorePanel" asp-controller="Store" class="nav-link">درخواست پنل فروشندگی</a></li>
+        <li><a asp-area="User" asp-action="StoreRequests" asp-controller="Store" class="nav-link">درخواست های فروشندگی</a></li>
+       @if(await _storeService.IsUserHaveStore(User.UserId())) {
+            <li><a asp-area="Store" asp-action="Index" asp-controller="Home" class="nav-link">پنل فروشندگی</a></li>
+        }
+        <li><a asp-area="" asp-action="LogOut" asp-controller="Account" class="nav-link">خروج</a></li>
+    </ul>
+</div>

@@ -1,0 +1,15 @@
+D:\MarketPlace\MarketPlace\MarketPlace.application\bin\Debug\net5.0\MarketPlace.application.deps.json
+D:\MarketPlace\MarketPlace\MarketPlace.application\bin\Debug\net5.0\MarketPlace.application.dll
+D:\MarketPlace\MarketPlace\MarketPlace.application\bin\Debug\net5.0\ref\MarketPlace.application.dll
+D:\MarketPlace\MarketPlace\MarketPlace.application\bin\Debug\net5.0\MarketPlace.application.pdb
+D:\MarketPlace\MarketPlace\MarketPlace.application\bin\Debug\net5.0\MarketPlace.dataLayer.dll
+D:\MarketPlace\MarketPlace\MarketPlace.application\bin\Debug\net5.0\MarketPlace.dataLayer.pdb
+D:\MarketPlace\MarketPlace\MarketPlace.application\obj\Debug\net5.0\MarketPlace.application.csproj.AssemblyReference.cache
+D:\MarketPlace\MarketPlace\MarketPlace.application\obj\Debug\net5.0\MarketPlace.application.GeneratedMSBuildEditorConfig.editorconfig
+D:\MarketPlace\MarketPlace\MarketPlace.application\obj\Debug\net5.0\MarketPlace.application.AssemblyInfoInputs.cache
+D:\MarketPlace\MarketPlace\MarketPlace.application\obj\Debug\net5.0\MarketPlace.application.AssemblyInfo.cs
+D:\MarketPlace\MarketPlace\MarketPlace.application\obj\Debug\net5.0\MarketPlace.application.csproj.CoreCompileInputs.cache
+D:\MarketPlace\MarketPlace\MarketPlace.application\obj\Debug\net5.0\MarketPlace.application.csproj.CopyComplete
+D:\MarketPlace\MarketPlace\MarketPlace.application\obj\Debug\net5.0\MarketPlace.application.dll
+D:\MarketPlace\MarketPlace\MarketPlace.application\obj\Debug\net5.0\ref\MarketPlace.application.dll
+D:\MarketPlace\MarketPlace\MarketPlace.application\obj\Debug\net5.0\MarketPlace.application.pdb

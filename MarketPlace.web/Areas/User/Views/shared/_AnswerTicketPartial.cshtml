@@ -1,0 +1,9 @@
+﻿ @model MarketPlace.dataLayer.DTOs.Contact.AddTicketMessageDto
+<form method="post" asp-area="User" asp-controller="Ticket" asp-action="AddTicketMessage">
+    @*<partial name="_CaptchaInput"/>*@
+    <input type="hidden" asp-for="TicketId" />
+    <textarea asp-for="Message" ckEditor="2"></textarea>
+    <button type="submit" class="btn btn-success">
+        ثبت 
+    </button>
+</form> 

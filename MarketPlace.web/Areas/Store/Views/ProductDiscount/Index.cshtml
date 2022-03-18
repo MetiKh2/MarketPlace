@@ -1,0 +1,82 @@
+﻿@using MarketPlace.application.Utils
+@model MarketPlace.dataLayer.DTOs.Discount.FilterProductDiscountDto
+@{
+    ViewData["Title"] = "کد های تخفیف محصول";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+string NotFoundError = " کد تخفیفی یافت نشد";
+}
+ 
+
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a href="/">خانه</a></li>
+                        <li>@ViewData["Title"]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="main_content_area">
+    <div class="container">
+        <div class="account_dashboard">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    @await Component.InvokeAsync("StoreSideBar")
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-9">
+                    <!-- Tab panes -->
+                    <div class="tab-content dashboard_content">
+                        <div class="tab-pane fade active show" id="account-details">
+                            <h3>@ViewData["Title"] </h3>
+                            <div class="table-responsive">
+                                <form id="filter-form" asp-area="Store" asp-controller="StoreWallet" asp-action="Index" method="get">
+                                    <input type="hidden" asp-for="PageId"/>
+                                </form>
+                                @if (Model.ProductDiscounts != null && Model.ProductDiscounts.Any())
+                                {
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>درصد</th>
+                                                <th>ظرفیت باقی مانده</th>
+                                                <th>تاریخ انقضا</th>
+                                                <th>دستورات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.ProductDiscounts)
+                                            {
+                                                <tr>
+                                                    <td>@item.Percentage </td>
+                                                    <td>@item.DiscountNumberUsage</td>
+                                                       <td> @item.ExpireDate.ToShamsiDate()</td>
+                                                       <td>
+                                                        
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                    <partial name="_SitePaging" model="@Model.GetCurrentPaging()"></partial>
+
+                                }
+            else
+            {
+                                    <partial name="_NoItemFound" model="@NotFoundError"/>
+            }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+ 

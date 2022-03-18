@@ -1,0 +1,81 @@
+﻿@model MarketPlace.dataLayer.DTOs.Store.FilterRequestStoreDto
+@using MarketPlace.application.EnumExtensions
+@{
+    ViewData["Title"] = "لیست درخواست ها";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    string NotFoundError = "هیچ درخواستی یافت نشد";
+
+}
+
+
+
+
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a href="/">خانه</a></li>
+                        <li>@ViewData["Title"]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="main_content_area">
+    <div class="container">
+        <div class="account_dashboard">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    @await Component.InvokeAsync("UserSideBar")
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-9">
+                    <!-- Tab panes -->
+                    <div class="tab-content dashboard_content">
+                        <form method="get" asp-area="User" asp-controller="Store" asp-action="StoreRequests" id="filter-form">
+                            <input asp-for="PageId" type="hidden"/>
+                        </form>
+                        <div class="tab-pane fade active show" id="account-details">
+                            <h3>@ViewData["Title"] </h3>
+                            <div class="table-responsive">
+                                @if (Model.Stores != null && Model.Stores.Any())
+                                {
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>عنوان فروشگاه</th>
+                                                <th>تلفن</th>
+                                                <th>وضعیت</th>
+                                                <th>دستورات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Stores)
+                                            {
+                                                <tr>
+                                                    <td>@item.StoreName</td>
+                                                    <td>@item.Phone</td>
+                                                    <td><span class="danger">@item.StoreAcceptanceState.GetEnumDisplayName()  </span></td>
+                                                    <td><a asp-area="User" asp-controller="Store" asp-action="EditStoreRequest" asp-route-requestId="@item.Id" class="view">ویرایش درخواست </a></td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                               <partial name="_SitePaging" model="@Model.GetCurrentPaging()"/>
+                                }
+                                else
+                                {
+                                    <partial name="_NoItemFound" model="@NotFoundError" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

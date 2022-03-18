@@ -1,0 +1,75 @@
+﻿@model List<MarketPlace.dataLayer.Entities.Store.ProductGallery>
+@using MarketPlace.application.Utils
+@{
+    ViewData["Title"] = "گالری محصول";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    string NotFoundError = "تصویری یافت نشد";
+}
+
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a href="/">خانه</a></li>
+                        <li>@ViewData["Title"]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="main_content_area">
+    <div class="container">
+        <div class="account_dashboard">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    @await Component.InvokeAsync("StoreSideBar")
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-9">
+                    <!-- Tab panes -->
+                    <div class="tab-content dashboard_content">
+                        <div class="tab-pane fade active show" id="account-details">
+                            <h3>@ViewData["Title"] </h3>
+                            <div class="table-responsive">
+                                <a class="btn btn-success mb-3 btn-sm" style="font-size:14px" asp-area="Store" asp-controller="Product" asp-action="CreateProductGallery" asp-route-productId="@ViewBag.productId">افزودن گالری جدید</a>
+                                @if (Model != null && Model.Any())
+                                {
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>تصویر</th>
+                                                <th>اولویت نمایش</th>
+                                                <th>دستورات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td><img src="@(PathExtension.ProductGalleryThumbImage+item.ImageName)"  /></td>
+                                                    <td>@item.DisplayPeriority</td>
+                                                    <td><a asp-area="Store" asp-controller="Product" asp-action="EditGallery" asp-route-galleryId="@item.Id" class="view">  ویرایش تصویر  </a></td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+
+                                }
+            else
+            {
+                                    <partial name="_NoItemFound" model="@NotFoundError"/>
+            }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+ 
+

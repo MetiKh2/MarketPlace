@@ -1,0 +1,139 @@
+﻿@model MarketPlace.dataLayer.DTOs.Store.FilterRequestStoreDto
+@using MarketPlace.application.EnumExtensions
+@using MarketPlace.dataLayer.DTOs.Store
+@{
+    ViewData["Title"] = "درخواست های فروشندگی";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    string noItemError = "درخواستی یافت نشد";
+}
+<div class="col-md-4">
+    <div class="well with-header ">
+        <div class="header bordered-sky">
+            فیلتر ها
+        </div>
+        <form id="filter-form" asp-area="Admin" asp-controller="Store" asp-action="StoreRequests" method="get">
+            <input type="hidden" asp-for="PageId" />
+            <div class="form-group">
+                <input type="text" class="form-control" asp-for="StoreName" placeholder="نام فروشگاه ...">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" asp-for="Phone" placeholder=" تلفن فروشگاه ...">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" asp-for="Address" placeholder=" آدرس فروشگاه ...">
+            </div>
+            <hr />
+            <h5>وضعیت </h5>
+            <div class="control-group">
+                @foreach (var item in Html.GetEnumSelectList<FilterStoreState>())
+                {
+                    <div class="radio">
+                        <label>
+                            <input type="radio" class="colored-blue" value="@item.Value" name="@nameof(Model.StoreAcceptanceState)" @(Convert.ToInt32(item.Value) == Convert.ToInt32(Model.StoreAcceptanceState) ? "checked" : "")>
+                            <span class="text"> @item.Text  </span>
+                        </label>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="btn btn-info shiny">جستجو</button>
+        </form>
+    </div>
+</div>
+<div class="col-md-8">
+    <div class="well with-header with-footer">
+        <div class="header bordered-sky">
+            @ViewData["Title"]
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+
+                    <th>
+                        نام فروشگاه
+                    </th>
+                    <th>
+                        تلفن
+                    </th>
+                    <th>
+                        وضعیت
+                    </th>
+                    <th>
+                        دستورات
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.Stores != null && Model.Stores.Any())
+                {
+                    @foreach (var item in Model.Stores)
+                    {
+                        <tr id="ajax-url-@item.Id">
+
+                            <td>
+                                @item.StoreName
+                            </td>
+                            <td>
+                                @item.Phone
+                            </td>
+                            <td>
+                                @item.StoreAcceptanceState.GetEnumDisplayName()
+                            </td>
+                            <td>
+                                @if (item.StoreAcceptanceState != MarketPlace.dataLayer.Entities.Store.StoreAcceptanceState.Accepted)
+                                {
+                                    <a ajax-url-button="@item.Id" asp-area="Admin" asp-controller="Store" asp-action="AcceptStoreRequest" asp-route-requestId="@item.Id" class="btn btn-sm btn-success shiny">تایید درخواست</a>
+                                }
+                                @if (item.StoreAcceptanceState != MarketPlace.dataLayer.Entities.Store.StoreAcceptanceState.Rejjected)
+                                {
+                                    <a class="btn btn-sm btn-danger shiny" data-toggle="modal" data-target=".reject-modal-@item.Id">رد درخواست</a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <partial name="_NoItemFound" model="@noItemError" />
+                }
+            </tbody>
+        </table>
+        <div class="footer">
+            <partial name="_AdminPaging" model="@Model.GetCurrentPaging()" />
+        </div>
+    </div>
+</div>
+
+<!--LArge Modal Templates-->
+@if (Model.Stores != null && Model.Stores.Any())
+{
+    @foreach (var item in Model.Stores)
+    {
+        <div class="modal fade reject-modal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="myLargeModalLabel"> رد کردن اطلاعات </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form  asp-area="Admin" asp-controller="Store" asp-action="RejectStoreRequest"
+                        asp-antiforgery="true"
+                        data-ajax="true"
+                        data-method="post"
+                        data-ajax-success="OnSuccessRejectItem"
+                        >
+                            <partial name="_RejectItem" model="@(new MarketPlace.dataLayer.DTOs.Common.RejectItemDto {Id=item.Id })" />
+                        </form>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+    }
+}
+<!--End Large Modal Templates ajax-url-button="item.Id" asp-area="Admin" asp-controller="Store" asp-action="RejectStoreRequest" asp-route-requestId="item.Id"-->
+@section scripts{
+    <partial name="_JqueryValidators" />
+} 

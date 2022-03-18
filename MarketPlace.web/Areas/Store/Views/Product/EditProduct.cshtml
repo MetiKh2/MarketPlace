@@ -1,0 +1,220 @@
+﻿@model MarketPlace.dataLayer.DTOs.Store.EditProductDto
+@using MarketPlace.application.Utils
+@{
+    ViewData["Title"] = "ویرایش محصول";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    List<MarketPlace.dataLayer.Entities.Store.ProductCategory> AllCateories = ViewBag.AllCateories as List<MarketPlace.dataLayer.Entities.Store.ProductCategory>;
+    short counterColorsForTable= 0;
+    short counterColorsForInput= 0;
+    short counterFeatureForInput= 0;
+    short counterFeatureForTable= 0;
+}
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a href="/">خانه</a></li>
+                        <li>@ViewData["Title"]  </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="main_content_area">
+    <div class="container">
+        <div class="account_dashboard">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    <!-- Nav tabs -->
+                    @await Component.InvokeAsync("StoreSideBar")
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-9">
+                    <!-- Tab panes -->
+                    <div class="tab-content dashboard_content">
+                        <div class="tab-pane fade show active" id="account-details">
+                            <h3>@ViewData["Title"]</h3>
+                            <div class="login">
+                                <div class="login_form_container">
+                                    <div class="account_login_form">
+                                        <form id="create-product-form" enctype="multipart/form-data" asp-action="EditProduct" asp-area="Store" asp-controller="Product">
+                                         <input type="hidden" asp-for="Id"/>
+                                         <input type="hidden" asp-for="ImageName"/>
+                                            <label asp-for="Title"></label>
+                                            <input type="text" asp-for="Title">
+                                            <span class="text-danger d-block mb-1" asp-validation-for="Title"></span>
+                                            <label asp-for="Price"></label>
+                                            <input type="number" asp-for="Price">
+                                            <span class="text-danger d-block mb-1" asp-validation-for="Price"></span>
+                                            <label asp-for="ShortDescription" class="d-block"></label>
+                                            <textarea asp-for="ShortDescription" rows="8" class="w-100"></textarea>
+                                            <span class="text-danger d-block mb-1" asp-validation-for="ShortDescription"></span>
+                                            <label asp-for="Description"></label>
+                                            <textarea asp-for="Description" ckEditor="1"></textarea>
+                                            <span asp-validation-for="Description" class="text-danger"></span>
+                                            <label class="mt-3" for="is-active-input">فعال؟</label>
+                                            <input id="is-active-input" style="width:15px;height:13px;" asp-for="IsActive" />
+                                            <br />
+                                            <img src="@(PathExtension.ProductThumbImage+Model.ImageName)"/>
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <label class="d-block">تصویر</label>
+                                                    <input type="file" name="productImage" accept=".ong,.jpg,.jpeg" />
+                                                </div>
+                                            </div>
+                                            <hr />
+
+
+                                            @if (AllCateories != null && AllCateories.Any())
+                                            {
+                                                @foreach (var item in AllCateories.Where(p => p.ParentId == null))
+                                                {
+                                                    <ul>
+                                                        <li>
+                                                            <label class="mt-3"> @item.Title</label>
+                                                            <input type="checkbox" style="width:15px;height:13px;" name="ProductSelectedCategories" value="@item.Id" @(Model.ProductSelectedCategories.Any(p=>p==item.Id)?"checked":"") />
+                                                            @if (AllCateories.Any(p => p.ParentId == item.Id))
+                                                            {
+
+                                                                <ul class="ml-4">
+                                                                    @foreach (var sub in AllCateories.Where(p => p.ParentId == item.Id))
+                                                                    {
+                                                                        <li>
+                                                                            <label> @sub.Title</label>
+                                                                            <input @((Model.ProductSelectedCategories.Any(p=>p==sub.Id))?"checked":"")  type="checkbox" style="width:15px;height:13px;" name="ProductSelectedCategories" value="@sub.Id" />
+                                                                            @if (AllCateories.Any(p => p.ParentId == sub.Id))
+                                                                            {
+
+                                                                                <ul class="ml-5">
+                                                                                    @foreach (var sub2 in AllCateories.Where(p => p.ParentId == sub.Id))
+                                                                                    {
+                                                                                        <li>
+                                                                                            <label> @sub2.Title</label>
+                                                                                            <input @((Model.ProductSelectedCategories.Any(p=>p==sub2.Id))?"checked":"") type="checkbox" style="width:15px;height:13px;" name="ProductSelectedCategories" value="@sub2.Id" />
+                                                                                        </li>
+                                                                                    }
+                                                                                </ul>
+
+                                                                            }
+
+                                                                        </li>
+                                                                    }
+                                                                </ul>
+
+                                                            }
+                                                        </li>
+
+                                                    </ul>
+                                                }
+                                            }
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>رنگ محصول</label>
+                                                    <input type="text" placeholder="رنگ محصول" id="product-color-name-inp" />
+                                                </div>
+                                                 <div class="col-md-6">
+                                                    <label>     کد رنگ</label>
+                                                    <input type="color"  id="product-color-code-inp" />
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>  قیمت مضاف رنگ</label>
+                                                    <input type="number" placeholder=" قیمت مضاف رنگ " id="product-color-price-inp" />
+                                                </div>
+                                            </div>
+                                            <button type="button" style="background:#28a745" class="btn btn-success" id="AddProductColorToList">افزودن رنگ</button>
+                                            <div class="table-responsive mt-3">
+
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>نام رنگ</th>
+                                                            <th> رنگ</th>
+                                                            <th>قیمت</th>
+                                                            <th>دستورات</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="list-of-product-colors">
+                                                        @foreach (var item in Model.ProductColors)
+                                                        {
+                                                            
+                                                            <tr color-table-item="@counterColorsForTable">
+                                                                <td>@item.ColorName</td>
+                                                                <td style="background:@item.ColorCode"></td>
+                                                                <td>@item.Price</td>
+                                                                <td><a remove-color-btn="@counterColorsForTable" class="btn btn-danger btn-sm text-white" onclick="RemoveProductColore(@counterColorsForTable)">حذف رنگ</a></td>
+                                                            </tr>
+                                                            @(counterColorsForTable++)
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            @foreach (var item in Model.ProductColors)
+                                            {
+                                                <input type="hidden" name="ProductColors[@counterColorsForInput].ColorName" value="@item.ColorName"  color-name-hidden-inp="@counterColorsForInput"/>
+                                                <input type="hidden" name="ProductColors[@counterColorsForInput].Price" value="@item.Price"  color-price-hidden-inp="@counterColorsForInput"/>
+                                                <input type="hidden" name="ProductColors[@counterColorsForInput].ColorCode" value="@item.ColorCode"  color-code-hidden-inp="@counterColorsForInput"/>
+                                                @(counterColorsForInput++)
+                                            }
+                                             <hr />
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>ویژگی محصول</label>
+                                                    <input type="text" placeholder="رنگ محصول" id="product-feature-title-inp" />
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>    مقدار ویژگی</label>
+                                                    <input type="text" placeholder='مقدار ویژگی'  id="product-feature-value-inp" />
+                                                </div>
+                                            </div>
+                                            <button type="button" style="background:#28a745" class="btn btn-success" id="AddProductFeatureToList">افزودن ویژگی</button>
+
+                                               <div class="table-responsive mt-3">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>ویژگی  </th>
+                                                            <th> مقدار</th>
+                                                            <th>دستورات</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="list-of-product-features">
+                                                        @foreach (var item in Model.ProductFeature)
+                                                        {
+                                                               <tr feature-table-item="@counterFeatureForTable">
+                                                                <td>@item.Title</td>
+                                                                <td>@item.Value</td>
+                                                                <td><a remove-feature-btn="@counterFeatureForTable" class="btn btn-danger btn-sm text-white" onclick="RemoveProductFeature(@counterFeatureForTable)">حذف ویژگی</a></td>
+                                                            </tr>
+                                                            @(counterFeatureForTable++)
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                             @foreach (var item in Model.ProductFeature)
+                                            {
+                                                <input type="hidden" name="ProductFeature[@counterFeatureForInput].Title" value="@item.Title"  feature-title-hidden-inp="@counterFeatureForInput"/>
+                                                <input type="hidden" name="ProductFeature[@counterFeatureForInput].Value" value="@item.Value"  feature-value-hidden-inp="@counterFeatureForInput"/>
+                                                @(counterFeatureForInput++)
+                                            }
+                                            <div class="save_button primary_btn default_button">
+                                                <button type="submit">ثبت محصول</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+<partial name="_JqueryValidators" />
+}

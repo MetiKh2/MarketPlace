@@ -1,0 +1,86 @@
+﻿@model MarketPlace.dataLayer.DTOs.Discount.CreateProductDiscountDto
+@{
+    ViewData["Title"] = "افزودن تخفیف";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@section styles{
+<link rel="stylesheet" href="~/lib/date-picker/css/persianDatepicker-default.css" />
+<link rel="stylesheet" href="~/lib/date-picker/css/persianDatepicker-dark.css" />
+<link rel="stylesheet" href="~/lib/date-picker/css/persianDatepicker-latoja.css" />
+<link rel="stylesheet" href="~/lib/date-picker/css/persianDatepicker-melon.css" />
+<link rel="stylesheet" href="~/lib/date-picker/css/persianDatepicker-lightorang.css" />
+}
+ @section scripts{
+    <partial name="_JqueryValidators" />
+    <partial name="CaptchaScripts" />
+  <script src="~/lib/date-picker/js/persianDatePicker.js"></script>
+ <script>
+     $(function() {
+  $("#ExpireDate").persianDatepicker({theme:"dark",isRTL:true});
+});
+
+ </script>
+ }
+
+
+
+
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a href="/">خانه</a></li>
+                        <li>@ViewData["Title"]  </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="main_content_area">
+    <div class="container">
+        <div class="account_dashboard">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    <!-- Nav tabs -->
+                    @await Component.InvokeAsync("StoreSideBar")
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-9">
+                    <!-- Tab panes -->
+                    <div class="tab-content dashboard_content">
+                        <div class="tab-pane fade show active" id="account-details">
+                            <h3>@ViewData["Title"]   </h3>
+                            <div class="login">
+                                <div class="login_form_container">
+                                    <div class="account_login_form">
+                                        <form asp-action="CreateProductDiscount" asp-area="Store" asp-controller="ProductDiscount">
+                                            <partial name="_CaptchaInput" />
+                                            <input type="hidden" asp-for="ProductId"/>
+                                            <label>درصد</label>
+                                            <input type="number" asp-for="Percentage">
+                                            <span class="text-danger d-block mb-1" asp-validation-for="Percentage"></span>
+                                               <label>تاریخ انقضا</label>
+                                            <input type="text" asp-for="ExpireDate" style="width:100%">
+                                            <span class="text-danger d-block mb-1" asp-validation-for="ExpireDate"></span>
+                                               <label>ظرفیت</label>
+                                            <input type="number" asp-for="DiscountNumberUsage">
+                                            <span class="text-danger d-block mb-1" asp-validation-for="DiscountNumberUsage"></span>
+                                          
+                                            <div class="save_button primary_btn default_button">
+                                                <button type="submit">ذخیره</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

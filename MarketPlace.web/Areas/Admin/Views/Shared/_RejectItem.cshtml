@@ -1,0 +1,9 @@
+﻿@model MarketPlace.dataLayer.DTOs.Common.RejectItemDto
+
+<div class="form-group">
+    <label class="definpu">شرح رد</label>
+    <textarea class="form-control" asp-for="RejectMessage" rows="10"></textarea>
+    <span asp-validation-for="RejectMessage" style="display:block; margin:10px" class="d-block text-danger"></span>
+    <input type="hidden" asp-for="Id" />
+    <button class="btn btn-sm btn-danger shiny" type="submit">رد درخواست</button>
+</div>
